@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card-header">
+                    <h2 class="text-center">Aku mau nikah, hehe</h2>
+                  <div class="card-body" id="adminContent">
+                      <h3>Fahmi dan Putri</h3>
+                      
+                  <h3>nikahnya dirumah putri</h3><h3>tanggal 7 juli 2024, biar bagus 07-07</h3>
+      <br>
+      <h3>kalian pasti mencari-cari QR code buat transfer
+      </h3><h3>yaudah kalo ga ketemu, kita terima hadiah jalur langit aja
+      </h3></div>
+                  <div id="userDetailForm" style="display: none;">
+                    <h3>User Detail</h3>
+                    <form>
+                      <div class="form-group">
+                        <label for="userId">User ID:</label>
+                        <input type="text" id="userId" name="userId" class="form-control" readonly="">
+                      </div>
+                      <div class="form-group">
+                        <label for="username">Username:</label>
+                        <input type="text" id="username" name="username" class="form-control" readonly="">
+                      </div>
+                      <div class="form-group">
+                        <label for="role">Role:</label>
+                        <input type="text" id="role" name="role" class="form-control">
+                      </div>
+                      <div class="form-group">
+                        <label for="newPassword">New Password:</label>
+                        <input type="text" id="newPassword" name="newPassword" class="form-control">
+                      </div>
+                      <div class="text-center">
+                        <button type="button" class="btn btn-secondary" onclick="updateUserRole()">update</button>
+                      </div>
+                      <div class="text-center">
+                        <button type="button" class="btn btn-secondary" onclick="hideUserDetailForm()">Close</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        const baseurl = 'http://localhost:3001';
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            const data = {
+                username: username,
+                password: password
+            };
+
+            // Send a POST request to the API endpoint
+            fetch(`${baseurl}/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(res => {
+                // Handle the response from the server
+                if (res.message === 'Wrong password' || res.message === 'User not exist') {
+                    window.alert(res.message)
+                }
+                if (res.data.isVoted === true) {
+                    window.alert('You are already voted!')
+                    window.location.href = './login.html'
+                }
+                if (res.data.role === 'admin' || res.data.role === 'user') {
+                    // Save the token to local storage
+                    localStorage.setItem('token', res.data.token);
+                    // Redirect to the appropriate page based on the role
+                    if (res.data.role === 'admin') {
+                        // Redirect to the admin page
+                        window.location.href = './admin.html';
+                    } else {
+                        // Redirect to the user page
+                        window.location.href = './user.html';
+                    }
+                } else {
+                    // Handle other roles or errors
+                    window.alert('Invalid role or response:', res.message);
+                    // window.location.href = './login.html';
+                }
+            })
+            .catch(error => {
+                // Handle any errors that occurred during the fetch
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>
