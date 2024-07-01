@@ -301,6 +301,7 @@
                     <!-- <div class="img-bawah w-100 gs_reveal">
                         <img src="img/HD/WeddingYudhaSilvia13.JPG" class="w-100" alt="">
                     </div> -->
+                                <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/60JZB9waHUPWJTGbYO6kDB?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
                     <div class="google-maps gs_reveal gs_reveal_fromRight" id="maps-id">
                         <div class="cover-maps">
                             <div class="mapouter">
@@ -482,9 +483,11 @@
             for (var i = 0; i < sURLVariables.length; i++) 
             {
                 var sParameterName = sURLVariables[i].split('=');
-                if (sParameterName[0] == sParam) 
+                if (sParameterName[0] == sParam && sParameterName[1]) 
                 {
                     return sParameterName[1];
+                } else {
+                    return ''
                 }
             }
         }
